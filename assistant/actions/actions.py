@@ -223,11 +223,11 @@ class OpenIncidentForm(FormAction):
                 "ticket for you. Appreciate your enthusiasm though :)"
             )
         else:
-            result = await snow.create_incident(            
+            result = await snow.create_incident( 
+                user_profile.get("id"),           
                 tracker.get_slot("incident_title"),
                 tracker.get_slot("problem_description"),
-                tracker.get_slot("priority"),
-                user_profile.get("id")
+                tracker.get_slot("priority")
             )
             incident_number = result.get("number")
             if incident_number:
