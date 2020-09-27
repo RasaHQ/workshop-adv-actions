@@ -1,0 +1,103 @@
+intents:
+- greet
+- goodbye
+- bot_challenge
+- password_reset
+- inform
+- thank
+- help
+- problem_email
+- open_incident:
+    use_entities: []
+- incident_status
+- out_of_scope
+- restart
+- affirm
+- deny
+
+entities:
+- priority
+
+slots:
+  user_profile:
+    type: unfeaturized
+  user_name:
+    type: unfeaturized  
+  confirm:
+    type: unfeaturized
+  previous_email:
+    type: unfeaturized
+  caller_id:
+    type: unfeaturized
+  email:
+    type: unfeaturized
+  incident_title:
+    type: unfeaturized
+  priority:
+    type: unfeaturized
+  problem_description:
+    type: unfeaturized
+  requested_slot:
+    type: unfeaturized
+
+responses:
+  utter_out_of_scope:
+  - text: Sorry, I'm not sure how to respond to that. Type "help" for assistance.
+  utter_greet:
+  - text: Hello {user_name}! I'm your IT Helpdesk Assistant.
+  utter_goodbye:
+  - text: Goodbye!
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+  utter_ask_incident_title:
+  - text: What should we use for the title of this incident?
+  utter_ask_problem_description:
+  - text: What is the problem description for the issue?
+  utter_ask_priority:
+  - text: What is the priority of this issue?
+    buttons:
+      - payload: /inform{"priority":"low"}
+        title: low
+      - payload: /inform{"priority":"medium"}
+        title: medium
+      - payload: /inform{"priority":"high"}
+        title: high
+  utter_no_priority:
+  - text: Sorry "{priority}" is not a valid priority. Please try again.
+  utter_help:
+  - text: "I can help you open a service request ticket, or check the status of your open incidents.
+      \nYou can ask me things like:
+      \n- Open an incident
+      \n- Help me reset my password
+      \n- I'm having a issue with my email
+      \n- What's the status of the ticket I opened?"
+  utter_welcome:
+  - text: You're welcome!
+  utter_default:
+  - text: I didn't quite understand that. Could you rephrase?
+  utter_ask_confirm:
+  - text: "Should I open an incident with the following details?
+          \n    Title: {incident_title}
+          \n    Description: {problem_description}          
+          \n    Priority: {priority}"
+    buttons:
+    - title: Yes
+      payload: /affirm
+    - title: No, cancel the incident
+      payload: /deny
+  utter_incident_creation_canceled:
+  - text: Alright, I have cancelled the incident.
+  utter_ask_whatelse:
+    - text: What else can I help you with?
+
+forms:
+- open_incident_form
+- incident_status_form
+
+actions:
+- action_session_start
+- action_incident_status
+
+session_config:
+  session_expiration_time: 0.0
+  carry_over_slots_to_new_session: true

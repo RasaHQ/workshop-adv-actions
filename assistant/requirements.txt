@@ -1,0 +1,4 @@
+rasa~=1.10.0
+rasa-sdk~=1.10.0
+pytablewriter
+-r actions/requirements-actions.txt

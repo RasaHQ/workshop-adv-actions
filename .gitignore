@@ -1,0 +1,22 @@
+# Standard Ignores
+*.DS_Store
+*.vscode/
+*/venv
+__pycache__/
+
+# Rasa Ignores
+assistant/.history/
+assistant/.pytype/
+assistant/credentials.yml
+*.db-*
+assistant/rasa.db
+assistant/*.db
+assistant/results/
+assistant/models/
+
+# Java Ignores
+responses/.state/
+responses/.m2/
+responses/.vertx/
+responses/.idea
+responses/target/
