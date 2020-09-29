@@ -19,17 +19,7 @@ entities:
 - priority
 
 slots:
-  user_profile:
-    type: unfeaturized
-  user_name:
-    type: unfeaturized  
   confirm:
-    type: unfeaturized
-  previous_email:
-    type: unfeaturized
-  caller_id:
-    type: unfeaturized
-  email:
     type: unfeaturized
   incident_title:
     type: unfeaturized
@@ -44,7 +34,7 @@ responses:
   utter_out_of_scope:
   - text: Sorry, I'm not sure how to respond to that. Type "help" for assistance.
   utter_greet:
-  - text: Hello {user_name}! I'm your IT Helpdesk Assistant.
+  - text: Hello! I'm your IT Helpdesk Assistant.
   utter_goodbye:
   - text: Goodbye!
   utter_iamabot:
@@ -89,14 +79,6 @@ responses:
   - text: Alright, I have cancelled the incident.
   utter_ask_whatelse:
     - text: What else can I help you with?
-
-forms:
-- open_incident_form
-- incident_status_form
-
-actions:
-- action_session_start
-- action_incident_status
 
 session_config:
   session_expiration_time: 0.0

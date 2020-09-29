@@ -51,12 +51,6 @@ vault kv put secret/snow_service user=<user> pwd=<pwd> instance=<instance>
 
 Use `rasa train` to train a model.
 
-Run the duckling server (for entity extraction) in the background using docker:
-
-```bash
-docker run -d -p 8000:8000 rasa/duckling
-```
-
 Next set up your action server in another window:
 
 ```bash
