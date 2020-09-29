@@ -93,7 +93,42 @@ class OpenIncidentForm(FormAction):
             - a whole message
             or a list of them, where a first match will be picked"""
 
-        return {}
+        return {
+            "incident_title": [
+                self.from_trigger_intent(
+                    intent="password_reset",
+                    value="Problem resetting password",
+                ),
+                self.from_trigger_intent(
+                    intent="problem_email", value="Problem with email"
+                ),
+                self.from_text(
+                    not_intent=[
+                        "incident_status",
+                        "bot_challenge",
+                        "help",
+                        "affirm",
+                        "deny",
+                    ]
+                ),
+            ],
+            "problem_description": [
+                self.from_text(
+                    not_intent=[
+                        "incident_status",
+                        "bot_challenge",
+                        "help",
+                        "affirm",
+                        "deny",
+                    ]
+                )
+            ],
+            "priority": self.from_entity(entity="priority"),
+            "confirm": [
+                self.from_intent(value=True, intent="affirm"),
+                self.from_intent(value=False, intent="deny"),
+            ],
+        }
 
     def validate_priority(
         self,
