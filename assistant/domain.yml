@@ -25,12 +25,6 @@ slots:
     type: unfeaturized  
   confirm:
     type: unfeaturized
-  previous_email:
-    type: unfeaturized
-  caller_id:
-    type: unfeaturized
-  email:
-    type: unfeaturized
   incident_title:
     type: unfeaturized
   priority:
@@ -92,7 +86,6 @@ responses:
 
 forms:
 - open_incident_form
-- incident_status_form
 
 actions:
 - action_session_start

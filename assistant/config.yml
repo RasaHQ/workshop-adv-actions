@@ -11,10 +11,6 @@ pipeline:
   - name: DIETClassifier
     epochs: 150
     random_seed: 1
-  - name: DucklingHTTPExtractor
-    url: http://localhost:8000
-    dimensions:
-    - email
   - name: EntitySynonymMapper
 policies:
   - name: AugmentedMemoizationPolicy

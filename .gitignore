@@ -7,7 +7,6 @@ __pycache__/
 # Rasa Ignores
 assistant/.history/
 assistant/.pytype/
-assistant/credentials.yml
 *.db-*
 assistant/rasa.db
 assistant/*.db
