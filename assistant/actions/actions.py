@@ -39,6 +39,21 @@ class ActionSessionStart(Action):
         for key in tracker.current_slot_values().keys():
             slots.append(SlotSet(key=key, value=tracker.get_slot(key)))
 
+        user_profile = tracker.get_slot("user_profile")
+        user_name = tracker.get_slot("user_name")
+
+        if user_profile is None:
+            id = get_user_id_from_event(tracker)
+            if id == anonymous_profile.get("id"):
+                user_profile = anonymous_profile
+            else:
+                # Make an actual call to Snow API.
+                user_profile = await snow.get_user_profile(id)
+            slots.append(SlotSet(key="user_profile", value=user_profile))
+
+        if user_name is None:
+            slots.append(SlotSet(key="user_name", value=user_profile.get("name")))
+
         return slots
          
     async def run(
@@ -74,6 +89,28 @@ class IncidentStatus(Action):
         """Look up all incidents associated with email address
            and return status of each"""
 
+        user_profile = tracker.get_slot("user_profile")
+
+        # Handle anonymous profile. No need to call Snow API.
+        if user_profile.get("id") is anonymous_profile.get("id"):
+            message = "Since you are anonymous, I can't tell you your incident status :)"
+        else:
+            incident_states = snow.states_db()
+            incidents_result = await snow.retrieve_incidents(user_profile)
+            incidents = incidents_result.get("incidents")
+            if incidents:
+                message = "\n".join(
+                    [
+                        f"Incident {i.get('number')}: "
+                        f"{i.get('short_description')}, "
+                        f"opened on {i.get('opened_at')}"
+                        f"{incident_states.get(i.get('incident_state'))}"
+                        for i in incidents
+                    ]
+                )
+            else:
+                message = f"{incidents_result.get('error')}"
+        dispatcher.utter_message(message)
         return []
 
 class OpenIncidentForm(FormAction):
@@ -84,7 +121,12 @@ class OpenIncidentForm(FormAction):
     def required_slots(tracker: Tracker) -> List[Text]:
         """A list of required slots that the form has to fill"""
 
-        return []
+        return [
+            "incident_title",
+            "problem_description",
+            "priority",
+            "confirm"
+        ]
 
     def slot_mappings(self) -> Dict[Text, Union[Dict, List[Dict]]]:
         """A dictionary to map required slots to
@@ -139,7 +181,11 @@ class OpenIncidentForm(FormAction):
     ) -> Dict[Text, Any]:
         """Validate priority is a valid value."""
 
-        return {}
+        if value.lower() in snow.priority_db():
+            return {"priority": value}
+        else:
+            dispatcher.utter_message(template="utter_no_priority")
+            return {"priority": None}
 
     def build_slot_sets(self, user_profile) -> List[Dict]:  
         """Helper method to build slot sets"""
@@ -157,4 +203,39 @@ class OpenIncidentForm(FormAction):
     ) -> List[Dict]:
         """Create an incident and return the details"""
 
-        return []
+        user_profile = tracker.get_slot("user_profile")
+        confirm = tracker.get_slot("confirm")
+
+        if not confirm:
+            dispatcher.utter_message(
+                template="utter_incident_creation_canceled"
+            )
+            # Early exit.
+            return self.build_slot_sets(user_profile)
+
+        # Handle anonymous profile. No need to call Snow API.
+        if user_profile.get("id") == anonymous_profile.get("id"):
+            message = (
+                "Nice try anonymous. But I can't actually create a "
+                "ticket for you. Appreciate your enthusiasm though :)"
+            )
+        else:
+            result = await snow.create_incident(
+                user_profile.get("id"),
+                tracker.get_slot("incident_title"),
+                tracker.get_slot("problem_description"),
+                tracker.get_slot("priority")
+            )
+            incident_number = result.get("number")
+            if incident_number:
+                message = (
+                    f"Incident {incident_number} has been opeened for you."
+                    f"A support specialist will reach out to you soon."
+                )
+            else:
+                message = (
+                    f"Something went wrong while opening an incident for you. "
+                    f"{result.get('error')}"
+                )
+        dispatcher.utter_message(message)
+        return self.build_slot_sets(user_profile)

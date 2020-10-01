@@ -21,4 +21,5 @@ policies:
   - name: MappingPolicy
   - name: FallbackPolicy
     nlu_threshold: 0.7
+  - name: FormPolicy
   
