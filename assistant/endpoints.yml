@@ -3,5 +3,3 @@
 action_endpoint:
   url: "http://localhost:5055/webhook"
 
-nlg:
-  url: http://localhost:8080/api/v1/responses/workshop

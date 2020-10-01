@@ -143,3 +143,11 @@
 - please no
 - no don't do that
 - no, use abraham.lincoln@example.com
+
+## intent:explain
+- what priority options do I have?
+- what are the priority values?
+- do i need to specify a priority?
+- how can i specify a priority
+- how can I say that my issue needs attention?
+- I want someone to look into this asap

@@ -14,6 +14,7 @@ intents:
 - restart
 - affirm
 - deny
+- explain
 
 entities:
 - priority
@@ -30,8 +31,6 @@ slots:
   priority:
     type: unfeaturized
   problem_description:
-    type: unfeaturized
-  requested_slot:
     type: unfeaturized
 
 responses:
@@ -83,6 +82,8 @@ responses:
   - text: Alright, I have cancelled the incident.
   utter_ask_whatelse:
     - text: What else can I help you with?
+  utter_explain_priority:
+    - text: "Priority is being requested by IT help desk team to triage your incident. Type 'low', or 'medium', or 'high'"  
 
 forms:
 - open_incident_form

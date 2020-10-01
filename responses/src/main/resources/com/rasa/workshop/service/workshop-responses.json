@@ -92,5 +92,10 @@
     {
       "text": "What else can I help you with?"
     }
+  ],
+  "utter_explain_priority": [
+    {
+      "text": "Priority is being requested by IT help desk team to triage your incident. Type 'low', or 'medium', or 'high'"
+    }
   ]
 }
